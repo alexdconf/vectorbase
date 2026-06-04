@@ -1,9 +1,17 @@
 [project]
 name = "vectorbase"
 version = "0.1.0"
-description = "Add your description here"
+description = "An open source framework for serving semantic + metadata search over a pgvector database."
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
     "django>=6.0.5",
+    "psycopg[binary]>=3.2",
+    "pgvector>=0.3",
+    "sentence-transformers>=3.0",
+    "pyyaml>=6.0",
+    "django-environ>=0.11",
+    "django-ratelimit>=4.1",
+    "gunicorn>=23.0",
+    "whitenoise>=6.0",
 ]

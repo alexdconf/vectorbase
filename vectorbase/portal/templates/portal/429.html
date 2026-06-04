@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Too Many Requests</title>
+<style>
+  body { max-width: 40em; margin: 4em auto; padding: 0 1em; font-family: sans-serif; }
+</style>
+</head>
+<body>
+
+<h1>Too Many Requests</h1>
+
+{% if quota_exceeded %}
+  <p>The daily search limit has been reached. Please try again tomorrow.</p>
+{% else %}
+  <p>You have made too many requests. Please wait a moment and try again.</p>
+{% endif %}
+
+<p><a href="/">Return to search</a></p>
+
+</body>
+</html>

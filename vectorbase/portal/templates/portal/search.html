@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Search</title>
+<style>
+  body { max-width: 60em; margin: 2em auto; padding: 0 1em; font-family: sans-serif; }
+  fieldset { border: 1px solid #ccc; margin: 0.5em 0; padding: 0.5em 1em; }
+  legend { font-weight: bold; }
+  label { display: block; margin: 0.25em 0; }
+  input, select { font-size: 1em; }
+  button[type=submit] { margin-top: 1em; font-size: 1em; padding: 0.4em 1.2em; }
+  hr { margin: 2em 0; }
+  article { border-top: 1px solid #eee; padding: 1em 0; }
+  article:first-of-type { border-top: none; }
+  .similarity { color: #666; font-size: 0.9em; }
+  .no-results { color: #555; font-style: italic; }
+  ul.errorlist { color: red; padding-left: 1.2em; }
+  .error-banner { color: red; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<h1>Search</h1>
+
+<form method="get" action="">
+  {% if form.non_field_errors %}
+    <ul class="errorlist">
+      {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+    </ul>
+  {% endif %}
+
+  <fieldset>
+    <legend>Query</legend>
+    <label for="{{ form.q.id_for_label }}">
+      {{ form.q.label }}:
+      {{ form.q }}
+    </label>
+    {% if form.q.errors %}
+      <ul class="errorlist">{% for e in form.q.errors %}<li>{{ e }}</li>{% endfor %}</ul>
+    {% endif %}
+  </fieldset>
+
+  {% for group in filter_groups %}
+    <fieldset>
+      <legend>{{ group.label }}</legend>
+      {% if group.type == "range" %}
+        <label>
+          From:
+          {{ group.field_gte }}
+          {% if group.field_gte.errors %}
+            <ul class="errorlist">{% for e in group.field_gte.errors %}<li>{{ e }}</li>{% endfor %}</ul>
+          {% endif %}
+        </label>
+        <label>
+          To:
+          {{ group.field_lte }}
+          {% if group.field_lte.errors %}
+            <ul class="errorlist">{% for e in group.field_lte.errors %}<li>{{ e }}</li>{% endfor %}</ul>
+          {% endif %}
+        </label>
+      {% elif group.type == "category" %}
+        {{ group.field }}
+        {% if group.field.errors %}
+          <ul class="errorlist">{% for e in group.field.errors %}<li>{{ e }}</li>{% endfor %}</ul>
+        {% endif %}
+      {% elif group.type == "value" %}
+        <label>
+          {{ group.field.label }}:
+          {{ group.field }}
+          {% if group.field.errors %}
+            <ul class="errorlist">{% for e in group.field.errors %}<li>{{ e }}</li>{% endfor %}</ul>
+          {% endif %}
+        </label>
+      {% endif %}
+    </fieldset>
+  {% endfor %}
+
+  <button type="submit">Search</button>
+</form>
+
+{% if has_input %}
+  <hr>
+  {% if form_has_errors %}
+    <p class="error-banner">Please correct the errors above and try again.</p>
+  {% elif result_count is not None %}
+    {% if results %}
+      <p><strong>{{ result_count }} result{{ result_count|pluralize }}</strong></p>
+      <section aria-label="Search results">
+        {% for result in results %}
+          <article>
+            {% for label, value in result.fields %}
+              <p><strong>{{ label }}:</strong> {{ value|default:"—" }}</p>
+            {% endfor %}
+            {% if result.similarity is not None %}
+              <p class="similarity">Similarity: {{ result.similarity|floatformat:3 }}</p>
+            {% endif %}
+          </article>
+        {% endfor %}
+      </section>
+    {% else %}
+      <p class="no-results">No results found.</p>
+    {% endif %}
+  {% endif %}
+{% endif %}
+
+</body>
+</html>

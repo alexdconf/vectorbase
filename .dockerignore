@@ -1,0 +1,21 @@
+# Version control
+.git/
+
+# Python artifacts
+**/__pycache__/
+**/*.py[codz]
+**/*.so
+.venv/
+
+# Django runtime files (generated at runtime, not build time)
+vectorbase/.env
+vectorbase/db.sqlite3
+vectorbase/db.sqlite3-journal
+vectorbase/staticfiles/
+
+# Development tooling
+.claude/
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+.python-version

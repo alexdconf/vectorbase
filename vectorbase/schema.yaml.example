@@ -1,0 +1,59 @@
+# VectorBase schema config example
+# ─────────────────────────────────
+# Run `python manage.py generate_config` to auto-generate this file from your
+# pgvector database schema.  Then:
+#   1. Set `search.model` to the sentence-transformers model used at populate time.
+#   2. Remove fields you don't want in the UI (presence = shown).
+#   3. Adjust `label` values for human-readable display names.
+#   4. Run: python manage.py migrate
+
+search:
+  table: my_vectors_table        # Postgres table holding the vectors
+  embedding_column: embedding    # Column of type vector (auto-detected)
+  model: sentence-transformers/all-MiniLM-L6-v2  # Must match the model used to populate the DB
+  top_k: 4                       # Number of results to return
+
+fields:
+  # ── No filter; shown in results only ─────────────────────────────────────
+  - name: title
+    label: Title
+    show_in_results: true
+    filter: null
+
+  # ── Category filter (select from distinct values) ────────────────────────
+  - name: author
+    label: Author
+    show_in_results: true
+    filter:
+      type: category
+      column_type: text
+
+  # ── Numeric range filter ─────────────────────────────────────────────────
+  - name: year
+    label: Year
+    show_in_results: true
+    filter:
+      type: range
+      column_type: integer       # integer | float | date | timestamp
+
+  # ── Date range filter ────────────────────────────────────────────────────
+  - name: pub_date
+    label: Published
+    show_in_results: false       # filtered but not shown in result cards
+    filter:
+      type: range
+      column_type: date
+
+  # ── Free-text substring filter ───────────────────────────────────────────
+  - name: abstract
+    label: Abstract
+    show_in_results: true
+    filter:
+      type: value
+      column_type: text
+
+  # ── Shown in results, no filter ──────────────────────────────────────────
+  - name: url
+    label: URL
+    show_in_results: true
+    filter: null
