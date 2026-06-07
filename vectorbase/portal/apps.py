@@ -6,7 +6,7 @@ class PortalConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
 
     def ready(self) -> None:
-        """Load the schema config and warm up category choices at startup."""
+        """Load the schema config and warm up category choices and the embedding model at startup."""
         from django.conf import settings
 
         from portal import config as portal_config
@@ -23,6 +23,20 @@ class PortalConfig(AppConfig):
 
                 warnings.warn(
                     f"VectorBase: could not populate category choices at startup: {exc}",
+                    stacklevel=1,
+                )
+
+            # Load (and, if needed, download) the embedding model now so the
+            # first search request isn't the one paying for it.
+            try:
+                from portal.search import get_embedding_model
+
+                get_embedding_model()
+            except Exception as exc:  # noqa: BLE001
+                import warnings
+
+                warnings.warn(
+                    f"VectorBase: could not load the embedding model at startup: {exc}",
                     stacklevel=1,
                 )
         except FileNotFoundError as exc:
