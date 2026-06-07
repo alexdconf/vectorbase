@@ -20,14 +20,12 @@ env = environ.Env(
     SEARCH_RATE_LIMIT=(str, "100/d"),
     SECRET_KEY=(str, "change-me-in-production"),
     ALLOWED_HOSTS=(str, "localhost,127.0.0.1"),
-    VECTORS_DB_NAME="postgres",
-    VECTORS_DB_USER="postgres",
-    VECTORS_DB_PASSWORD="test",
-    VECTORS_DB_HOST="localhost",
-    VECTORS_DB_PORT=5432,
-    # DEFAULT_DB_URL=
-    # CACHE_URL=
-    SCHEMA_CONFIG_PATH="schema.yaml",
+    VECTORS_DB_NAME=(str, "postgres"),
+    VECTORS_DB_USER=(str, "postgres"),
+    VECTORS_DB_PASSWORD=(str, "test"),
+    VECTORS_DB_HOST=(str, "localhost"),
+    VECTORS_DB_PORT=(int, 5432),
+    SCHEMA_CONFIG_PATH=(str, "schema.yaml"),
 )
 
 # ---------------------------------------------------------------------------

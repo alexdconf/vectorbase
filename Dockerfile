@@ -6,7 +6,19 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # Keep Python from writing .pyc files and from buffering stdout/stderr.
 ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    # django
+    DEBUG=True \
+    ALLOWED_HOSTS=localhost,127.0.0.1 \
+    # postgres
+    VECTORS_DB_NAME=postgres \
+    VECTORS_DB_USER=postgres \
+    VECTORS_DB_HOST=localhost \
+    VECTORS_DB_PORT=5432 \
+    # vectorbase
+    SCHEMA_CONFIG_PATH=schema.yaml \
+    SEARCH_RATE_LIMIT=100/d \
+    GLOBAL_DAILY_QUOTA=10000
 
 WORKDIR /app
 
