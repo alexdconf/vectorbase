@@ -219,3 +219,6 @@ __marimo__/
 
 # App config
 schema.yaml
+
+# macOS
+.DS_Store
